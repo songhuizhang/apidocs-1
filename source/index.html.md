@@ -1588,3 +1588,5 @@ orderId 或 origClientOrderId 必须至少发送一个
 - 3d  3天
 - 1w  1周
 - 1M  1月
+
+# 错误码
