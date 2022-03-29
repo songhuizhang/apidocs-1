@@ -19,10 +19,10 @@ meta:
 
 - 私有接口需要API Key才可以访问. 请参考[这个页面](https://www.mexc.com/user/openapi)来设置API Key.
 - 设置API Key的同时，为了安全，建议设置IP访问白名单(未添加白名单有效期为90天).
-- 永远不要把你的API key/secret告诉给任何人
+- 永远不要把你的API key/secret告诉给任何人.
   
 <aside class="warning">如果不小心泄露了API key，请立刻删除此Key, 并可以另外生产新的Key.</aside>
- 
+
 ## API Key 权限设置
 
 在创建API Key时勾选所需要的权限
@@ -36,6 +36,10 @@ meta:
 <aside class="notice">
 使用中遇到问题请通过<a href="https://github.com/mxcdevelop/mexc-api-sdk/issues" target="_blank">提交问题</a>反馈
 </aside>
+### Postman Collections
+
+现在你可以通过`Postman collection`来快速体验、使用API接口。
+如果想了解更多如何使用Postman，请访问: [Mexc API Postman](https://github.com/mxcdevelop/mexc-api-postman)
 
 ## 联系我们
 
@@ -48,9 +52,38 @@ meta:
 
 # 更新日志
 
-| 时间       | 接口 | 更新类型 | 说明            |
-| ---------- | ---- | -------- | --------------- |
-| 2022-02-08 | *    | 新增     | REST API V3发布 |
+## **2022-03-29**
+
+- 新增母子账户模块相关接口
+
+## **2022-03-25**
+
+- 新增Postman Collections
+
+## **2022-03-24**
+
+- 新增市价订单详细说明
+
+## **2022-03-21**
+
+- 新增订单状态枚举
+
+## **2022-03-18**
+
+- 新增订单类型：市价单
+- 新增分页说明：startTime和endTime需同时使用
+
+## **2022-03-09**
+
+- 新增枚举类型
+- 修复文档问题
+
+## **2022-02-19**
+
+- 新增ETF接口
+
+## **2022-02-11**
+- 新版API
 
 
 # 基本信息
@@ -80,6 +113,15 @@ meta:
 ## 返回格式
 
 所有接口的返回数据均为JSON形式
+
+## Header操作的组成
+
+请求Header中签名相关参数
+
+| 组成部分            | 说明                   |
+| ------------------- | ---------------------- |
+| ```X-MEXC-APIKEY``` | API key中的access key  |
+| ```Content-Type```  | ```application/json``` |
 
 ## 签名
 - 调用SIGNED 接口时，除了接口本身所需的参数外，还需要在query string 或 request body中传递 signature, 即签名参数。
@@ -117,14 +159,14 @@ meta:
 HMAC SHA256 signature:
 
     $ echo -n "symbol=BTCUSDT&side=BUY&type=LIMIT&quantity=1&price=11&recvWindow=5000&timestamp=1644489390087" | openssl dgst -sha256 -hmac "45d0b3c26f2644f19bfb98b07741b2f5"
-    (stdin)= ddbaf78eaf7abc69ce44d7781cc9e53b5aaee48c890a20d606fd825c9ee2a285
+    (stdin)= 323c96ab85a745712e95e63cad28903dd8292e4a905e99c4ee3932023843a117
 ```
 
 ```shell
 curl command:
 
     (HMAC SHA256)
-    $ curl -H "X-MEXC-APIKEY: mx0aBYs33eIilxBWC5" -X POST 'https://api.mexc.com/api/v3/order' -d 'symbol=BTCUSDT&side=BUY&type=LIMIT&quantity=1&price=11&recvWindow=5000&timestamp=1644489390087&signature=ddbaf78eaf7abc69ce44d7781cc9e53b5aaee48c890a20d606fd825c9ee2a285'
+    $ curl -H "X-MEXC-APIKEY: mx0aBYs33eIilxBWC5" -X POST 'https://api.mexc.com/api/v3/order' -d 'symbol=BTCUSDT&side=BUY&type=LIMIT&quantity=1&price=11&recvWindow=5000&timestamp=1644489390087&signature=323c96ab85a745712e95e63cad28903dd8292e4a905e99c4ee3932023843a117'
 
 ```
 
@@ -134,14 +176,14 @@ curl command:
 HMAC SHA256 signature:
 
     $ echo -n "symbol=BTCUSDT&side=BUY&type=LIMIT&quantity=1&price=11&recvWindow=5000&timestamp=1644489390087" | openssl dgst -sha256 -hmac "45d0b3c26f2644f19bfb98b07741b2f5"
-    (stdin)= ddbaf78eaf7abc69ce44d7781cc9e53b5aaee48c890a20d606fd825c9ee2a285
+    (stdin)= fd3e4e8543c5188531eb7279d68ae7d26a573d0fc5ab0d18eb692451654d837a
 ```
 
 ```shell
 curl command:
 
     (HMAC SHA256)
-    $ curl -H "X-MEXC-APIKEY: mx0aBYs33eIilxBWC5" -X POST 'https://api.mexc.com/api/v3/order' -d 'symbol=BTCUSDT&side=BUY&type=LIMIT&quantity=1&price=11&recvWindow=5000&timestamp=1644489390087&signature=ddbaf78eaf7abc69ce44d7781cc9e53b5aaee48c890a20d606fd825c9ee2a285'
+    $ curl -H "X-MEXC-APIKEY: mx0aBYs33eIilxBWC5" -X POST 'https://api.mexc.com/api/v3/order' -d 'symbol=BTCUSDT&side=BUY&type=LIMIT&quantity=1&price=11&recvWindow=5000&timestamp=1644489390087&signature=fd3e4e8543c5188531eb7279d68ae7d26a573d0fc5ab0d18eb692451654d837a'
 
 ```
 
@@ -152,22 +194,22 @@ curl command:
 HMAC SHA256 signature:
 
     $ echo -n "symbol=BTCUSDT&side=BUY&type=LIMITquantity=1&price=11&recvWindow=5000&timestamp=1644489390087" | openssl dgst -sha256 -hmac "45d0b3c26f2644f19bfb98b07741b2f5"
-    (stdin)= ddbaf78eaf7abc69ce44d7781cc9e53b5aaee48c890a20d606fd825c9ee2a285
+    (stdin)= d1a676610ceb39174c8039b3f548357994b2a34139a8addd33baadba65684592
 ```
 
 ```shell
 curl command:
 
     (HMAC SHA256)
-    $ curl -H "X-MEXC-APIKEY: mx0aBYs33eIilxBWC5" -X POST 'https://api.mexc.com/api/v3/order?symbol=BTCUSDT&side=BUY&type=LIMIT' -d 'quantity=1&price=11&recvWindow=5000&timestamp=1644489390087&signature=ddbaf78eaf7abc69ce44d7781cc9e53b5aaee48c890a20d606fd825c9ee2a285'
+    $ curl -H "X-MEXC-APIKEY: mx0aBYs33eIilxBWC5" -X POST 'https://api.mexc.com/api/v3/order?symbol=BTCUSDT&side=BUY&type=LIMIT' -d 'quantity=1&price=11&recvWindow=5000&timestamp=1644489390087&signature=d1a676610ceb39174c8039b3f548357994b2a34139a8addd33baadba65684592'
 
 ```
 
 以下是在linux bash环境下使用 echo openssl 和curl工具实现的一个调用接口下单的示例 apikey、secret仅供示范
 
-| Key       | Value                                                            |
-| --------- | ---------------------------------------------------------------- |
-| apiKey    | mx0aBYs33eIilxBWC5                                               |
+| Key       | Value                            |
+| --------- | -------------------------------- |
+| apiKey    | mx0aBYs33eIilxBWC5               |
 | secretKey | 45d0b3c26f2644f19bfb98b07741b2f5 |
 
 
@@ -185,24 +227,12 @@ curl command:
 **示例 1: 所有参数通过 request body 发送**
 
 - requestBody:
-symbol=BTCUSDT
-&side=BUY
-&type=LIMIT
-&quantity=1
-&price=11
-&recvWindow=5000
-&timestamp=1644489390087
+symbol=BTCUSDT&side=BUY&type=LIMIT&quantity=1&price=11&recvWindow=5000&timestamp=1644489390087
 
 **所有参数通过 query string 发送**
 
 - queryString:
-symbol=BTCUSDT
-&side=BUY
-&type=LIMIT
-&quantity=1
-&price=11
-&recvWindow=5000
-&timestamp=1644489390087
+symbol=BTCUSDT&side=BUY&type=LIMIT&quantity=1&price=11&recvWindow=5000&timestamp=1644489390087
 
 **示例 3: 混合使用 query string 和 request body**
 
@@ -221,35 +251,6 @@ quantity=1&price=11&recvWindow=5000&timestamp=1644489390087
 
 未说明限速规则的接口默认为20次/秒
 
-# 接入说明
-
-## 签名操作的组成
-
-请求Header中签名相关参数
-
-| 组成部分            | 说明                   |
-| ------------------- | ---------------------- |
-| ```X-MEXC-APIKEY``` | API key中的access key  |
-| ```Content-Type```  | ```application/json``` |
-
-## 签名方法 
-
-1. 对于公共接口,不需要签名。
-
-2. 对于私有接口,需要在header中传入X-MEXC-APIKEY、Signature、Content-Type 必须指定为application/json，Signature为签名字符串
-
-* 签名规则如下:
-    1. 签名时需要先获得请求参数字符串，无参时为""：<br />对于GET/DELETE请求，按Querystring拼接业务参数以&间隔，并最终获得签名目标串（在批量操作的API中，若参数值中有逗号等特殊符号，这些符号在签名时需要做URL encode）。<br />对于POST请求，签名参数为json字符串（无需进行字典排序）。
-    2. 获得参数字符串后，再拼接签名目标串，规则为：accessKey+时间戳+获取到的参数字符串
-    3. 使用HMAC SHA256算法对目标串用SecretKey进行签名，并最终将签名作为参数携带到header中
-
-注意：
-
-  1)参与签名的业务参数为null时，不参与签名；注意get请求将参数拼接至url上时，如果参数为null， 后台解析时，会解析成""，POST请求，参数为null时，不要传该参数，或者签名时，将该参数的值设置为""，否则会出现验签失败。
-
-  2)请求时将签名时用到的Request-Time的值放入header的Request-Time参数中，获得的签名字符串放入header的Signature参数中，将APIKEY的Access Key放在header的ApiKey参数中，其余业务参数按正常传递即可。
-
-  3)获得的签名字符串不需要进行base64进行编码。
 
 # 行情接口
 
@@ -281,6 +282,7 @@ NONE
 
 - **GET** ```/api/v3/time ```
   
+
 参数：
 
 NONE
@@ -305,7 +307,7 @@ NONE
       "quoteAssetPrecision": 1,
       "baseCommissionPrecision": 1,
       "quoteCommissionPrecision": 1,
-      "orderTypes": ["LIMIT", "LIMIT_MAKER"],
+      "orderTypes": ["LIMIT", "LIMIT_MAKER", "MARKET"],
       "icebergAllowed": false,
       "ocoAllowed": false,
       "quoteOrderQtyMarketAllowed": false,
@@ -429,11 +431,10 @@ NONE
 
 参数：
 
-| 参数名 | 数据类型 | 是否必须 | 说明                                             | 取值范围            |
-| ------ | -------- | -------- | ------------------------------------------------ | ------------------- |
-| symbol | string   | 是       | 交易对名称                                       |                     |
-| limit  | integer  | 否       | 返回的条数                                       | 默认 500; 最大 1000 |
-| fromId | integer  | 否       | 从哪一条成交id开始返回. 缺省返回最近的成交记录。 |                     |
+| 参数名 | 数据类型 | 是否必须 | 说明       | 取值范围            |
+| ------ | -------- | -------- | ---------- | ------------------- |
+| symbol | string   | 是       | 交易对名称 |                     |
+| limit  | integer  | 否       | 返回的条数 | 默认 500; 最大 1000 |
 
 
 响应：
@@ -468,7 +469,7 @@ NONE
 ```
 
 - **GET** ```/api/v3/aggTrades```
-  
+
 归集交易与逐笔交易的区别在于，同一价格、同一方向、同一时间的trade会被聚合为一条
 
 参数：
@@ -476,11 +477,11 @@ NONE
 | 参数名    | 数据类型 | 是否必须 | 说明                               | 取值范围            |
 | --------- | -------- | -------- | ---------------------------------- | ------------------- |
 | symbol    | string   | 是       | 交易对名称                         |                     |
-| fromId    | long     | 否       | 从包含fromId的成交id开始返回结果   |                     |
 | startTime | long     | 否       | 从该时刻之后的成交记录开始返回结果 |                     |
-| endTimne  | long     | 否       | 返回该时刻为止的成交记录           |                     |
+| endTime   | long     | 否       | 返回该时刻为止的成交记录           |                     |
 | limit     | integer  | 否       | 返回的条数                         | 默认 500; 最大 1000 |
 
+注意：startTime和endTime需同时使用
 
 响应：
 
@@ -514,8 +515,9 @@ NONE
 ]
 ```
 
-- **GET** ```/api/v3/kline```
+- **GET** ```/api/v3/klines```
   
+
 每根K线代表一个交易对。
 每根K线的开盘时间可视为唯一ID
 
@@ -529,6 +531,7 @@ NONE
 | endTimne  | long     | 否       |                     |
 | limit     | integer  | 否       | 默认 500; 最大 1000 |
 
+注意：startTime和endTime需同时使用
 
 响应：
 
@@ -642,7 +645,7 @@ or
 ]
 ```
 
-- **GET** ```/api/v3/ticker/25hr```
+- **GET** ```/api/v3/ticker/24hr```
 
 参数：
 
@@ -696,7 +699,7 @@ or
 ]
 ```
 
-- **GET** ```/api/v3/price```
+- **GET** ```/api/v3/ticker/price```
 
 参数：
 
@@ -764,6 +767,245 @@ OR
 | bidQty   | 最高买盘数量 |
 | askPrice | 最低卖盘价   |
 | askQty   | 最低卖盘数量 |
+
+
+# 母子账户接口
+
+## 创建子账户
+
+> **响应:**
+
+```
+{
+    "subAccount":"mexc1",
+    "note":"1"
+}
+
+```
+
+**HTTP请求**
+
+POST / api/v3/sub-account/virtualSubAccount
+
+**参数:**
+
+| 名称       | 类型   | 是否必需 | 描述       |
+| :--------- | :----- | :------- | :--------- |
+| subAccount | STRING | YES      | 子账户名称 |
+| note       | STRING | YES      | 备注       |
+| recvWindow | LONG   | NO       |            |
+| timestamp  | LONG   | YES      |            |
+
+- 该请求会为您的母账户生成一个虚拟子账户
+
+  
+
+## 查看子账户列表
+
+
+
+> **响应:**
+
+```
+{
+    "subAccounts":[
+        {
+            "subAccount":"mexc666",
+            "isFreeze":false,//是否冻结
+            "createTime":1544433328000
+        },
+        {
+            "subAccount":"mexc888",
+            "isFreeze":false,
+            "createTime":1544433328000
+        }
+    ]
+}
+
+```
+
+ **HTTP请求**
+
+GET / api/v3/sub-account/list 
+
+**参数:**
+
+| 名称       | 类型   | 是否必需 | 描述                |
+| :--------- | :----- | :------- | :------------------ |
+| subAccount | STRING | NO       | 子账户              |
+| isFreeze   | STRING | NO       | true or false       |
+| page       | INT    | NO       | 默认: 1             |
+| limit      | INT    | NO       | 默认: 10, 最大: 200 |
+| timestamp  | LONG   | YES      |                     |
+| recvWindow | LONG   | NO       |                     |
+
+
+
+## 创建子账户的APIkey
+
+
+
+**HTTP请求**
+
+POST /api/v3/sub-account/apiKey
+
+> 请求示例
+
+```
+POST /api/v3/sub-account/apiKey
+body
+[
+        {
+            "subAccount":"mexc1",
+            "permissions":"SPOT_ACCOUNT_READ",
+            "ip":"135.181.193",
+            "note":"1"
+        }
+]
+```
+
+**请求参数**
+
+| 参数名      | 类型   | 是否必须 | 描述                                                         |
+| ----------- | ------ | -------- | ------------------------------------------------------------ |
+| subAccount  | STRING | 是       | 子账户名称                                                   |
+| note        | STRING | 是       | APIKey的备注                                                 |
+| permissions | STRING | 是       | APIKey权限,SPOT_ACCOUNT_READ,SPOT_ORDER_READ,SPOT_ORDER, ,SPOT_WITHDRAW_READ,SPOT_WITHDRAW,SPOT_TRANSFER_READ,SPOT_TRANSFER,FUTURES_ACCOUNT_READ,FUTURES_ORDER_READ,FUTURES_ORDER |
+| ip          | STRING | 否       | 绑定ip地址，多个ip用半角逗号隔开，最多支持20个ip             |
+| recvWindow  | LONG   | 否       |                                                              |
+| timestamp   | LONG   | 是       |                                                              |
+
+> 响应示例
+
+```
+    {
+        "subAccount": "mexc1",
+        "note": "1",
+        "apiKey": "arg13sdfgs",
+        "secretKey": "nkjwn21973ihi",
+        "permissions": "SPOT_ACCOUNT_READ",
+        "ip": "135.181.193",
+        "creatTime": 1597026383085
+    }
+
+```
+
+**响应参数**
+
+| 参数名      | 类型   | 描述               |
+| ----------- | ------ | ------------------ |
+| subAccount  | STRING | 子账户名称         |
+| note        | STRING | APIKey的备注       |
+| apiKey      | STRING | API公钥            |
+| secretKey   | STRING | API的私钥          |
+| permissions | STRING | APIKey权限         |
+| ip          | STRING | APIKey绑定的ip地址 |
+| creatTime   | LONG   | 创建时间           |
+
+
+
+## 查询子账户的APIKey
+
+
+
+**HTTP请求**
+
+GET /api/v3/sub-account/apiKey
+
+> 请求示例
+
+```
+GET/api/v3/sub-account/apiKey?subAccount=mexc666&timestamp=1597026383085
+```
+
+**请求参数**
+
+| 参数名     | 类型   | 是否必须 | 描述       |
+| :--------- | :----- | :------- | :--------- |
+| subAccount | STRING | 是       | 子账户名称 |
+| recvWindow | LONG   | 否       |            |
+| timestamp  | LONG   | 是       |            |
+
+> 响应示例
+
+```
+{
+       "subAccount":[
+        {
+            "note":"v5",
+            "apiKey":"arg13sdfgs",
+            "permissions":"SPOT_ACCOUNT_READ,SPOT_ACCOUNT_WRITE",
+            "ip":"1.1.1.1,2.2.2.2",
+            "creatTime":1597026383085
+        },
+        {
+            "note":"v5.1",
+            "apiKey":"arg13sdfgs",
+            "permissions":"read_only",
+            "ip":"1.1.1.1,2.2.2.2",
+            "creatTime":1597026383085
+        }
+        ]
+}
+```
+
+**响应参数**
+
+| **参数名**  | **类型** | **描述**           |
+| :---------- | :------- | :----------------- |
+| note        | STRING   | APIKey的备注       |
+| apiKey      | STRING   | API公钥            |
+| permissions | STRING   | APIKey权限         |
+| ip          | STRING   | APIKey绑定的ip地址 |
+| creatTime   | LONG     | 创建时间           |
+
+
+
+## 删除子账户的APIKey
+
+**HTTP请求**
+
+DELETE /api/v3/sub-account/apiKey
+
+> 请求示例
+
+```
+DELETE /api/v3/sub-account/apiKey
+body
+[
+        {
+            "subAccount":"mexc1",
+            "apiKey":"ghytfugy2168hjksaj"
+        }
+]
+```
+
+**请求参数**
+
+| 参数名     | 类型   | 是否必须 | 描述       |
+| :--------- | :----- | :------- | :--------- |
+| subAccount | STRING | 是       | 子账户名称 |
+| apiKey     | STRING | 是       | API的公钥  |
+| recvWindow | LONG   | 否       |            |
+| timestamp  | LONG   | 是       |            |
+
+> 响应示例
+
+```
+{
+           "subAccount":"mexc1"
+}
+
+```
+
+**响应参数**
+
+| **参数名** | **类型** | **描述**   |
+| :--------- | :------- | :--------- |
+| subAccount | STRING   | 子账户名称 |
+
+
+
 # 现货账户和交易接口
 
 ## 测试下单
@@ -804,13 +1046,28 @@ OR
 | side             | ENUM    | YES      | 详见枚举定义：订单方向 |
 | type             | ENUM    | YES      | 详见枚举定义：订单类型 |
 | quantity         | DECIMAL | NO       | 委托数量               |
+| quoteOrderQty    | DECIMAL | NO       | 委托总额               |
 | price            | DECIMAL | NO       | 委托价格               |
 | newClientOrderId | STRING  | NO       | 客户自定义的唯一订单ID |
 | recvWindow       | LONG    | NO       | 赋值不能大于 60000     |
 | timestamp        | LONG    | YES      |                        |
 
-枚举值
-|名称||
+基于订单 `type`不同，强制要求某些参数:
+
+| 类型     | 强制要求的参数                |
+| :------- | :---------------------------- |
+| `LIMIT`  | `quantity`, `price`           |
+| `MARKET` | `quantity` or `quoteOrderQty` |
+
+其他说明：
+
+MARKET：当type是market时，若为买单，则quoteOrderQty，为必填参数。
+若为卖单，quantity为必填参数，
+
+- 比如在`BTCUSDT`上下一个市价买单, 明确的是买入时想要花费的计价资产数量。此时的报单数量将会以市场流动性和`quoteOrderQty`被计算出来（实际成交数量以最终订单详情为准）。
+  以`BTCUSDT`为例，`quoteOrderQty=100`:下买单的时候, 订单会尽可能的买进价值100USDT的BTC.
+
+- 比如在`BTCUSDT`上下一个市价卖单, `quantity`为用户指明能够卖出多少BTC。
 
 ## 撤销订单
 > 响应示例
@@ -843,7 +1100,7 @@ OR
 | ----------------- | -------- | -------- | ---------------------- |
 | symbol            | string   | 是       | 交易对名称             |
 | orderId           | string   | 否       | 订单Id                 |
-| origClientOrderId | string   | 否       | 订单Id                 |
+| origClientOrderId | string   | 否       | 初始自定义订单Id       |
 | newClientOrderId  | string   | NO       | 客户自定义的唯一订单ID |
 | recvWindow        | long     | 否       |                        |
 | timestamp         | long     | 是       |                        |
@@ -859,7 +1116,7 @@ orderId 或 origClientOrderId 必须至少发送一个
 | orderId             | 订单id           |
 | clientOrderId       | 客户端id         |
 | price               | 价格             |
-| origOty             | qi shi           |
+| origOty             | 初始数量         |
 | executedQty         | 交易的订单数量   |
 | cummulativeQuoteQty | 累计交易金额     |
 | status              | 状态             |
@@ -926,7 +1183,7 @@ orderId 或 origClientOrderId 必须至少发送一个
 | orderId             | 订单id           |
 | clientOrderId       | 客户端id         |
 | price               | 价格             |
-| origOty             | qi shi           |
+| origOty             | 初始数量         |
 | executedQty         | 交易的订单数量   |
 | cummulativeQuoteQty | 累计交易金额     |
 | status              | 状态             |
@@ -1108,6 +1365,7 @@ orderId 或 origClientOrderId 必须至少发送一个
 | recvWindow | long     | 否       |                      |
 | timestamp  | long     | 是       |                      |
 
+注意：startTime和endTime需同时使用
 
 响应：
 
@@ -1215,21 +1473,19 @@ orderId 或 origClientOrderId 必须至少发送一个
 
 - **GET** ```/api/v3/myTrades```
 
-
 获取账户指定交易对的成交历史
 
 参数：
 
-| 参数名     | 数据类型 | 是否必须 | 说明                   |
-| ---------- | -------- | -------- | ---------------------- |
-| symbol     | string   | 是       | 交易对                 |
-| orderId    | string   | 否       | 必须和symbol一起使用   |
-| startTime  | long     | 否       |                        |
-| endTime    | long     | 否       |                        |
-| fromId     | long     | 否       | 起始Id默认查询最新交易 |
-| limit      | int      | 否       | 默认 500; 最大 1000;   |
-| recvWindow | long     | 否       |                        |
-| timestamp  | long     | 是       |                        |
+| 参数名     | 数据类型 | 是否必须 | 说明                 |
+| ---------- | -------- | -------- | -------------------- |
+| symbol     | string   | 是       | 交易对               |
+| orderId    | string   | 否       | 必须和symbol一起使用 |
+| startTime  | long     | 否       |                      |
+| endTime    | long     | 否       |                      |
+| limit      | int      | 否       | 默认 500; 最大 1000; |
+| recvWindow | long     | 否       |                      |
+| timestamp  | long     | 是       |                      |
 
 
 响应：
@@ -1245,9 +1501,51 @@ orderId 或 origClientOrderId 必须至少发送一个
 | time            | 成交时间          |
 | commission      | 交易费金额        |
 | commissionAsset | 交易类资产类型    |
-| time            | 交易时间          |
 | isBuyerMaker    | 是否为买方maker单 |
 | isBestMatch     | 是否为最佳匹配    |
+
+# ETF接口
+
+## 获取杠杆ETF基础信息
+
+> 响应示例
+
+```json
+{
+
+"symbol": "BTC3LUSDT", 
+
+"netValue": "0.147", 
+
+"feeRate":" 0.00001", 
+
+"timestamp": `1507725176595`
+
+}
+
+```
+
+- **GET** ```api/v3/etf/info```
+
+获取ETF的基础信息，如可交易币对、最新净值和管理费率。
+
+参数：
+
+| 参数   | 数据类型 | 是否必须 | 默认值 | 描述                    |
+| ------ | -------- | -------- | ------ | ----------------------- |
+| symbol | string   | 否       | NA     | ETF交易对，不填返回所有 |
+
+
+
+响应：
+
+| 字段名称  | 数据类型 | 描述          |
+| --------- | -------- | ------------- |
+| symbol    | string   | 杠杆ETF交易对 |
+| netValue  | string   | 最新净值      |
+| feeRate   | string   | 管理费率      |
+| timestamp | long     | 系统时间      |
+
 
 
 # 公开API参数
@@ -1262,4 +1560,31 @@ orderId 或 origClientOrderId 必须至少发送一个
 ### 订单类型
 
 - LIMIT 限价单
+- MARKET 市价单
 - LIMIT_MAKER 限价只挂单
+
+### 订单状态
+
+- NEW 未成交
+- FILLED 已成交
+- PARTIALLY_FILLED 部分成交
+- CANCELED 已撤销
+- PARTIALLY_CANCELED 部分撤销
+
+### K线间隔
+
+- 1m  1分钟
+- 3m  3分钟
+- 5m  5分钟
+- 15m  15分钟
+- 30m  30分钟
+- 1h  1小时
+- 2h  2小时
+- 4h  4小时
+- 6h  6小时
+- 8h  8小时
+- 12h  12小时
+- 1d  1天
+- 3d  3天
+- 1w  1周
+- 1M  1月
